@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Задачи</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjogItCX0LDQtNCw0YfQuCIsICJzaG9ydF9uYW1lIjogItCX0LDQtNCw0YfQuCIsICJkZXNjcmlwdGlvbiI6ICLQntGE0YTQu9Cw0LnQvS3Qv9GA0LjQu9C+0LbQtdC90LjQtSDQtNC70Y8g0YPQv9GA0LDQstC70LXQvdC40Y8g0LfQsNC00LDRh9Cw0LzQuCIsICJzdGFydF91cmwiOiAiLi9pbmRleC5odG1sIiwgInNjb3BlIjogIi4vIiwgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIsICJiYWNrZ3JvdW5kX2NvbG9yIjogIiNmMGY0ZjgiLCAidGhlbWVfY29sb3IiOiAiIzM0OThkYiIsICJsYW5nIjogInJ1IiwgImljb25zIjogW119" />
+  <meta name="theme-color" content="#3498db">
+</head>
+<body>
+
+  <!-- Индикатор оффлайн режима -->
+  <div id="offline-indicator" class="offline-indicator">
+    Вы в оффлайн режиме
+  </div>
+
+  <div id="scrollable">
+    <div class="app">
+
+      <header>
+        <div class="header-container">
+          <div class="button-bar">
+            <div class="header-buttons">
+              <button id="add-task-btn" class="neumorphic-btn small primary">Задача</button>
+              <button id="calendar-btn" class="neumorphic-btn small">Календарь</button>
+              <button id="progress-btn" class="neumorphic-btn small">Прогресс</button>
+              <button id="settings-btn" class="neumorphic-btn small">Настройки</button>
+            </div>
+          </div>
+          <div class="button-bar">
+            <div class="header-buttons type-tabs" id="type-tabs">
+              <!-- вкладки категорий добавляются динамически через JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Модальное окно добавления задачи -->
+        <div id="add-task-modal" class="neumorphic-menu">
+          <div class="modal-header">
+            <h3>Новая задача</h3>
+            <button id="close-add-task" class="neumorphic-btn small">×</button>
+          </div>
+
+          <div class="widget-type-toggle" id="widget-type-toggle">
+            <button type="button" class="neumorphic-btn small widget-type-btn active" data-mode="list">Список</button>
+            <button type="button" class="neumorphic-btn small widget-type-btn" data-mode="progress">Прогресс</button>
+            <button type="button" class="neumorphic-btn small widget-type-btn" data-mode="daily">Daily Check</button>
+          </div>
+
+          <div id="list-mode-fields">
+            <label class="field-label">Пункты</label>
+            <div id="task-lines-container" class="task-lines-container">
+              <!-- строки задач добавляются через JS -->
+            </div>
+
+            <button id="add-task-line-btn" class="neumorphic-btn small">+ Добавить пункт</button>
+          </div>
+
+          <div id="progress-mode-fields" class="hidden">
+            <label class="field-label" for="task-progress-title-input">Название</label>
+            <input type="text" id="task-progress-title-input" class="neumorphic-input" placeholder="Введите название" />
+
+            <label class="field-label" for="task-progress-steps-input">Количество нажатий до 100%</label>
+            <input type="number" id="task-progress-steps-input" class="neumorphic-input" min="1" value="10" />
+          </div>
+
+          <div id="daily-mode-fields" class="hidden">
+            <label class="field-label" for="task-daily-title-input">Название</label>
+            <input type="text" id="task-daily-title-input" class="neumorphic-input" placeholder="Введите название" />
+
+            <label class="field-label" for="task-daily-days-input">Количество дней</label>
+            <input type="number" id="task-daily-days-input" class="neumorphic-input" min="1" max="365" value="20" />
+          </div>
+
+          <div class="modal-divider"></div>
+          <p class="section-label">Дополнительно</p>
+
+          <label class="field-label" for="task-type-input">Категория</label>
+          <div class="type-suggestions" id="type-suggestions">
+            <button type="button" class="type-suggestion-chip" data-preset="Постоянные">Постоянные</button>
+            <button type="button" class="type-suggestion-chip" data-preset="Единичные">Единичные</button>
+            <button type="button" class="type-suggestion-chip" data-preset="Обучение">Обучение</button>
+            <button type="button" id="toggle-due-date-btn" class="type-suggestion-chip">Дедлайн</button>
+          </div>
+          <input type="text" id="task-type-input" class="neumorphic-input" placeholder="Введите категорию" />
+
+          <div id="due-date-calendar" class="due-date-calendar hidden">
+            <div class="calendar-header">
+              <button type="button" id="calendar-prev-btn" class="calendar-nav-btn" aria-label="Предыдущий месяц">‹</button>
+              <span id="calendar-month-label" class="calendar-month-label"></span>
+              <button type="button" id="calendar-next-btn" class="calendar-nav-btn" aria-label="Следующий месяц">›</button>
+            </div>
+            <div class="calendar-weekdays">
+              <span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span>
+            </div>
+            <div id="calendar-days" class="calendar-days"></div>
+            <div class="calendar-legend">
+              <span class="legend-item"><i class="legend-dot load-medium"></i> Средняя загрузка</span>
+              <span class="legend-item"><i class="legend-dot load-high"></i> Высокая загрузка</span>
+            </div>
+            <div class="calendar-footer">
+              <button type="button" id="clear-due-date-btn" class="neumorphic-btn small">Очистить</button>
+              <button type="button" id="calendar-today-btn" class="neumorphic-btn small">Сегодня</button>
+            </div>
+          </div>
+
+          <div class="button-group">
+            <button id="save-task-widget-btn" class="neumorphic-btn primary">Создать</button>
+            <button id="cancel-task-widget-btn" class="neumorphic-btn">Отмена</button>
+          </div>
+        </div>
+
+        <!-- Календарь загрузки -->
+        <div id="calendar-modal" class="neumorphic-menu">
+          <div class="modal-header">
+            <h3>Календарь</h3>
+            <button id="close-calendar-modal" class="neumorphic-btn small">×</button>
+          </div>
+
+          <div class="calendar-header">
+            <button type="button" id="main-calendar-prev-btn" class="calendar-nav-btn" aria-label="Предыдущий месяц">‹</button>
+            <span id="main-calendar-month-label" class="calendar-month-label"></span>
+            <button type="button" id="main-calendar-next-btn" class="calendar-nav-btn" aria-label="Следующий месяц">›</button>
+          </div>
+          <div class="calendar-weekdays">
+            <span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span>
+          </div>
+          <div id="main-calendar-days" class="calendar-days"></div>
+
+          <div class="calendar-legend">
+            <span class="legend-item"><i class="legend-dot load-medium"></i> Средняя загрузка</span>
+            <span class="legend-item"><i class="legend-dot load-high"></i> Высокая загрузка</span>
+          </div>
+
+          <div id="calendar-day-detail" class="calendar-day-detail hidden">
+            <p class="section-label" id="calendar-day-detail-title"></p>
+            <div id="calendar-day-detail-list" class="calendar-day-detail-list"></div>
+          </div>
+
+          <div class="button-group">
+            <button id="ok-calendar-btn" class="neumorphic-btn primary">Понятно</button>
+          </div>
+        </div>
+
+        <!-- Прогресс / статистика -->
+        <div id="stats-modal" class="neumorphic-menu">
+          <div class="modal-header">
+            <h3>Прогресс</h3>
+            <button id="close-stats" class="neumorphic-btn small">×</button>
+          </div>
+
+          <div class="stats-grid" id="stats-summary">
+            <!-- заполняется через JS -->
+          </div>
+
+          <p class="section-label">Активность за 7 дней</p>
+          <div class="stats-chart" id="stats-chart">
+            <!-- мини-гистограмма по дням -->
+          </div>
+
+          <p class="section-label">По категориям</p>
+          <div class="stats-categories" id="stats-categories">
+            <!-- список категорий с количеством выполненных -->
+          </div>
+
+          <div class="button-group">
+            <button id="ok-stats-btn" class="neumorphic-btn primary">Понятно</button>
+          </div>
+        </div>
+
+        <!-- Настройки -->
+        <div id="settings-modal" class="neumorphic-menu">
+          <div class="modal-header">
+            <h3>Настройки</h3>
+            <button id="close-settings" class="neumorphic-btn small">×</button>
+          </div>
+
+          <p class="section-label">Тема</p>
+          <div class="widget-type-toggle" id="theme-toggle">
+            <button type="button" class="neumorphic-btn small widget-type-btn theme-btn active" data-theme="light">Светлая</button>
+            <button type="button" class="neumorphic-btn small widget-type-btn theme-btn" data-theme="dark">Тёмная</button>
+          </div>
+
+          <div class="modal-divider"></div>
+
+          <p class="section-label">Резервная копия</p>
+          <p class="placeholder-text">В Safari на iOS данные иногда удаляются системой — при нехватке места, в приватном режиме или при очистке истории. Сохраняйте копию задач в файл, чтобы не потерять их.</p>
+          <div class="button-group">
+            <button id="export-data-btn" class="neumorphic-btn small">Экспорт</button>
+            <button id="import-data-btn" class="neumorphic-btn small">Импорт</button>
+          </div>
+          <input type="file" id="import-file-input" accept="application/json" class="hidden" />
+
+          <div class="button-group">
+            <button id="ok-settings-btn" class="neumorphic-btn primary">Понятно</button>
+          </div>
+        </div>
+      </header>
+
+      <section class="task-widgets" id="task-widgets">
+        <!-- Виджеты с задачами добавляются динамически -->
+      </section>
+
+      <div id="empty-state" class="empty-state">
+        <p>Пока нет задач</p>
+        <p class="empty-state-sub">Нажмите «Задача», чтобы добавить первую</p>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
