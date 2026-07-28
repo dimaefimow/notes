@@ -1,0 +1,1153 @@
+/* styles.css — дизайн-система взята из основного приложения (та же палитра, тени, шрифты) */
+:root {
+  --bg: #f0f4f8;
+  --text: #333;
+  --shadow-light: #ffffff;
+  --shadow-dark: #c8d0e7;
+  --primary: #3498db;
+  --primary-hover: #2980b9;
+  --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --border-radius: 16px;
+  --danger: #e74c3c;
+  --danger-hover: #c0392b;
+  --success: #2ecc71;
+  --warning: #f39c12;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body.dark {
+  --bg: #1a1a1a;
+  --text: #e0e0e0;
+  --shadow-light: #2a2a2a;
+  --shadow-dark: #0c0c0c;
+  --primary: #3498db;
+  --primary-hover: #2980b9;
+  --danger: #e74c3c;
+  --danger-hover: #c0392b;
+  --success: #2ecc71;
+  --warning: #f39c12;
+}
+
+body.dark .modal-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark .modal-divider {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+body.dark .task-row.done .task-complete-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  margin: 0;
+  padding: 0;
+  transition: var(--transition);
+  min-height: 100vh;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  line-height: 1.6;
+  overflow: hidden;
+  height: 100%;
+}
+
+#scrollable {
+  height: 100vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-top: 0;
+  transition: padding-top 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* когда индикатор оффлайна показан, контент отодвигается вниз ровно на его
+   высоту (высота выставляется из JS в --offline-indicator-height), чтобы
+   капсула никогда не перекрывала верхнюю плашку с кнопками */
+#scrollable.offline-mode {
+  padding-top: var(--offline-indicator-height, 44px);
+}
+
+.app {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 10px;
+  position: relative;
+  min-height: 100%;
+}
+
+header {
+  padding-top: 8px;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.header-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 4px;
+}
+
+/* «Плашка» — обводка вокруг ряда кнопок, как у переключателя месяцев в основном приложении */
+.button-bar {
+  background: var(--bg);
+  border-radius: 999px;
+  box-shadow: 6px 6px 14px var(--shadow-dark), -6px -6px 14px var(--shadow-light);
+  padding: 8px 12px;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  width: 100%;
+  justify-content: flex-start;
+  min-height: 40px;
+}
+
+.header-buttons::-webkit-scrollbar {
+  display: none;
+}
+
+/* ---------- кнопки ---------- */
+.neumorphic-btn {
+  padding: 14px 20px;
+  border: none;
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: 8px 8px 18px var(--shadow-dark), -8px -8px 18px var(--shadow-light);
+  transition: var(--transition);
+  position: relative;
+}
+
+.neumorphic-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 11px 11px 24px var(--shadow-dark), -11px -11px 24px var(--shadow-light);
+}
+
+.neumorphic-btn:active {
+  transform: translateY(0);
+  box-shadow: inset 6px 6px 14px var(--shadow-dark), inset -6px -6px 14px var(--shadow-light);
+}
+
+.neumorphic-btn.primary {
+  background: var(--primary);
+  color: white;
+}
+
+.neumorphic-btn.primary:hover {
+  background: var(--primary-hover);
+}
+
+.neumorphic-btn.danger {
+  background: var(--danger);
+  color: white;
+}
+
+.neumorphic-btn.danger:hover {
+  background: var(--danger-hover);
+}
+
+.neumorphic-btn.small {
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  min-width: 85px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-weight: 600;
+  border-radius: 10px;
+}
+
+.neumorphic-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.calendar-day:focus-visible,
+.calendar-nav-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* ---------- вкладки типов (категорий) ---------- */
+.type-tabs {
+  justify-content: center;
+}
+
+.type-tab {
+  min-width: 90px;
+  gap: 8px;
+  padding-right: 10px;
+}
+
+.type-tab.active {
+  background: var(--primary);
+  color: white;
+  box-shadow: inset 5px 5px 11px rgba(0,0,0,0.3), inset -5px -5px 11px rgba(255,255,255,0.15);
+  transform: scale(1.05);
+}
+
+.type-tab-label {
+  pointer-events: none;
+}
+
+/* ---------- крестик удаления категории на вкладке ---------- */
+.type-tab-delete {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.12);
+  color: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: var(--transition);
+}
+
+.type-tab-delete:hover {
+  background: var(--danger);
+  color: #fff;
+  transform: scale(1.12);
+}
+
+.type-tab.active .type-tab-delete {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.type-tab.active .type-tab-delete:hover {
+  background: var(--danger);
+  color: #fff;
+}
+
+body.dark .type-tab-delete {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.type-tabs-empty-hint {
+  font-size: 0.85rem;
+  opacity: 0.55;
+  font-weight: 600;
+  padding: 6px 10px;
+  white-space: nowrap;
+}
+
+/* ---------- подсказки категорий в модалке создания задачи ---------- */
+.type-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.type-suggestion-chip {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 4px 4px 10px var(--shadow-dark), -4px -4px 10px var(--shadow-light);
+  transition: var(--transition);
+}
+
+.type-suggestion-chip:hover {
+  transform: translateY(-1px);
+}
+
+.type-suggestion-chip:active {
+  box-shadow: inset 3px 3px 7px var(--shadow-dark), inset -3px -3px 7px var(--shadow-light);
+}
+
+.type-suggestion-chip.active {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* ---------- поля ввода ---------- */
+.neumorphic-input {
+  padding: 12px 15px;
+  border: none;
+  border-radius: 12px;
+  background: var(--bg);
+  box-shadow: inset 6px 6px 13px var(--shadow-dark), inset -6px -6px 13px var(--shadow-light);
+  transition: var(--transition);
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  appearance: none;
+  color: var(--text);
+}
+
+.neumorphic-input:focus {
+  outline: none;
+  box-shadow: inset 7px 7px 15px var(--shadow-dark), inset -7px -7px 15px var(--shadow-light);
+}
+
+.field-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  opacity: 0.7;
+  margin: 14px 0 6px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ---------- деление формы на смысловые блоки ---------- */
+.modal-divider {
+  height: 1px;
+  background: rgba(0, 0, 0, 0.08);
+  margin: 18px 0 12px;
+}
+
+.section-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.5;
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+
+/* ---------- кнопка дедлайна ---------- */
+.type-suggestion-chip.has-date {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* ---------- собственный календарь (вместо нативного input[type=date]) ---------- */
+.due-date-calendar {
+  margin-top: 10px;
+  background: var(--bg);
+  border-radius: var(--border-radius);
+  box-shadow: 6px 6px 14px var(--shadow-dark), -6px -6px 14px var(--shadow-light);
+  padding: 14px;
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.calendar-month-label {
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-transform: capitalize;
+}
+
+.calendar-nav-btn {
+  background: var(--bg);
+  border: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 4px 4px 9px var(--shadow-dark), -4px -4px 9px var(--shadow-light);
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+
+.calendar-nav-btn:hover {
+  transform: scale(1.08);
+}
+
+.calendar-nav-btn:active {
+  box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 6px;
+}
+
+.calendar-weekdays span {
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  opacity: 0.5;
+}
+
+.calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  border: none;
+  background: var(--bg);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 4px 4px 9px var(--shadow-dark), -4px -4px 9px var(--shadow-light);
+  transition: var(--transition);
+  position: relative;
+}
+
+.calendar-day:hover {
+  transform: translateY(-1px);
+}
+
+.calendar-day:active {
+  box-shadow: inset 4px 4px 7px var(--shadow-dark), inset -4px -4px 7px var(--shadow-light);
+}
+
+.calendar-day.empty {
+  box-shadow: none;
+  cursor: default;
+  pointer-events: none;
+}
+
+.calendar-day.today {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+
+.calendar-day.selected {
+  background: var(--primary);
+  color: white;
+}
+
+.calendar-day-dot {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--warning);
+}
+
+.calendar-day.load-medium .calendar-day-dot {
+  background: var(--warning);
+}
+
+.calendar-day.load-high .calendar-day-dot {
+  background: var(--danger);
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2);
+}
+
+.calendar-day.selected .calendar-day-dot {
+  background: white;
+  box-shadow: none;
+}
+
+.calendar-legend {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  opacity: 0.75;
+  font-weight: 600;
+}
+
+.legend-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+  font-style: normal;
+}
+
+.legend-dot.load-medium {
+  background: var(--warning);
+}
+
+.legend-dot.load-high {
+  background: var(--danger);
+}
+
+.calendar-day-detail {
+  margin-top: 14px;
+  background: var(--bg);
+  border-radius: 12px;
+  padding: 12px 14px;
+  box-shadow: inset 5px 5px 11px var(--shadow-dark), inset -5px -5px 11px var(--shadow-light);
+}
+
+.calendar-day-detail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.calendar-day-detail-item {
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--bg);
+  box-shadow: 3px 3px 7px var(--shadow-dark), -3px -3px 7px var(--shadow-light);
+}
+
+.calendar-day-detail-item .cddi-type {
+  opacity: 0.6;
+  font-weight: 700;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  flex-shrink: 0;
+}
+
+.calendar-footer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.calendar-footer .neumorphic-btn.small {
+  min-width: 120px;
+}
+
+.task-widget .due-date {
+  margin: -6px 0 12px 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  opacity: 0.75;
+}
+
+/* ---------- переключатель типа виджета (список / прогресс) ---------- */
+.widget-type-toggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.widget-type-btn {
+  flex: 1;
+  width: auto;
+}
+
+.widget-type-btn.active {
+  background: var(--primary);
+  color: white;
+}
+
+/* ---------- виджет с прогресс-баром ---------- */
+.task-progress-container {
+  height: 14px;
+  background: rgba(0,0,0,0.08);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 4px 0 8px;
+}
+
+.task-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--widget-color);
+  transition: width 0.4s ease;
+}
+
+.task-progress-label {
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  opacity: 0.8;
+  margin: 0 0 12px 0;
+}
+
+/* ---------- виджет «Daily Check» ---------- */
+.daily-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 4px 0 10px;
+}
+
+.daily-cell {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 4px 4px 9px var(--shadow-dark), -4px -4px 9px var(--shadow-light);
+  transition: var(--transition);
+  cursor: default;
+  flex-shrink: 0;
+}
+
+.daily-cell.is-today {
+  cursor: pointer;
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.daily-cell.is-today:hover {
+  transform: translateY(-1px);
+}
+
+.daily-cell.is-today:active {
+  box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+}
+
+.daily-cell.done {
+  background: var(--success);
+  color: #fff;
+  box-shadow: inset 4px 4px 8px rgba(0,0,0,0.25), inset -4px -4px 8px rgba(255,255,255,0.12);
+}
+
+.daily-cell.missed {
+  color: var(--danger);
+  box-shadow: 4px 4px 9px var(--shadow-dark), -4px -4px 9px var(--shadow-light), inset 0 0 0 2px var(--danger);
+}
+
+.daily-summary {
+  font-size: 0.82rem;
+  font-weight: 600;
+  opacity: 0.75;
+  margin: 0 0 4px;
+}
+
+/* ---------- статистика (кнопка «Прогресс») ---------- */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.stat-card {
+  background: var(--bg);
+  border-radius: 12px;
+  padding: 14px 12px;
+  text-align: center;
+  box-shadow: inset 5px 5px 11px var(--shadow-dark), inset -5px -5px 11px var(--shadow-light);
+}
+
+.stat-card .stat-value {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--primary);
+  display: block;
+  line-height: 1.2;
+}
+
+.stat-card .stat-label {
+  font-size: 0.7rem;
+  opacity: 0.6;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.stats-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 100px;
+  margin: 10px 0 18px;
+  padding: 10px 8px 0;
+  background: var(--bg);
+  border-radius: 12px;
+  box-shadow: inset 5px 5px 11px var(--shadow-dark), inset -5px -5px 11px var(--shadow-light);
+}
+
+.stats-chart-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  height: 100%;
+}
+
+.stats-chart-bar {
+  width: 100%;
+  max-width: 22px;
+  border-radius: 6px 6px 2px 2px;
+  background: var(--primary);
+  min-height: 3px;
+  transition: height 0.3s ease;
+}
+
+.stats-chart-col.is-today .stats-chart-bar {
+  background: var(--success);
+}
+
+.stats-chart-col-label {
+  font-size: 0.65rem;
+  opacity: 0.55;
+  font-weight: 700;
+}
+
+.stats-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.stats-category-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  background: var(--bg);
+  box-shadow: inset 5px 5px 11px var(--shadow-dark), inset -5px -5px 11px var(--shadow-light);
+}
+
+.stats-category-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--dot-color, var(--primary));
+  flex-shrink: 0;
+}
+
+.stats-category-name {
+  flex: 1;
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+.stats-category-count {
+  font-weight: 800;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.stats-empty {
+  text-align: center;
+  opacity: 0.6;
+  padding: 14px 0;
+  font-size: 0.9rem;
+}
+
+/* ---------- общий подвал виджета (кнопки «Пропустить» / «Сделать») ---------- */
+.widget-footer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.progress-step-btn {
+  flex: 1;
+  background: var(--success);
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 5px 5px 12px var(--shadow-dark), -5px -5px 12px var(--shadow-light);
+  transition: var(--transition);
+}
+
+.progress-step-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+}
+
+/* ---------- модальные окна ---------- */
+.neumorphic-menu {
+  display: none;
+  position: fixed;
+  background: var(--bg);
+  border-radius: var(--border-radius);
+  padding: 20px;
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.3), 0 3px 10px rgba(0, 0, 0, 0.18);
+  z-index: 1000;
+  min-width: 280px;
+  width: 90%;
+  max-width: 420px;
+  max-height: 85vh;
+  overflow-y: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border: none;
+}
+
+.neumorphic-menu.show {
+  display: block;
+  opacity: 1;
+}
+
+.neumorphic-menu.show ~ .app::after,
+body.menu-open .app::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  z-index: 999;
+  pointer-events: none;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.modal-header .neumorphic-btn.small {
+  min-width: auto;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 1.1rem;
+}
+
+.placeholder-text {
+  opacity: 0.75;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.button-group {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.button-group .neumorphic-btn {
+  flex: 1;
+  min-width: 100px;
+}
+
+/* ---------- строки задач в модалке ---------- */
+.task-lines-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.task-line-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.task-line-row .neumorphic-input {
+  flex: 1;
+}
+
+.remove-task-line-btn {
+  background: var(--bg);
+  border: none;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 50%;
+  color: var(--danger);
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 4px 4px 9px var(--shadow-dark), -4px -4px 9px var(--shadow-light);
+  flex-shrink: 0;
+  font-size: 1.1rem;
+  transition: var(--transition);
+}
+
+.remove-task-line-btn:hover {
+  transform: scale(1.1);
+}
+
+#add-task-line-btn {
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* ---------- виджеты задач ---------- */
+.task-widgets {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin: 15px 0;
+  align-items: start;
+}
+
+.task-widget {
+  --widget-color: #3498db;
+  grid-column: span 1;
+  padding: 16px;
+  border-radius: var(--border-radius);
+  background: var(--bg);
+  border: none;
+  overflow: hidden;
+  position: relative;
+  animation: widgetFloatIn 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 12px 12px 26px var(--shadow-dark), -12px -12px 26px var(--shadow-light), 0 0 0 1px rgba(255,255,255,0.1), 0 0 20px 4px var(--widget-color);
+  transition: var(--transition), box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.task-widget.wide {
+  grid-column: span 2;
+}
+
+.task-widget:hover {
+  transform: translateY(-3px);
+}
+
+.task-widget.removing {
+  animation: widgetFadeOut 0.35s ease forwards;
+}
+
+@keyframes widgetFloatIn {
+  0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes widgetFadeOut {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.9); }
+}
+
+.task-widget h3 {
+  margin: 0 0 12px 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--widget-color);
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.task-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--bg);
+  box-shadow: inset 5px 5px 11px var(--shadow-dark), inset -5px -5px 11px var(--shadow-light);
+  transition: var(--transition);
+}
+
+.task-row .task-text {
+  flex: 1;
+  font-weight: 600;
+  font-size: 0.95rem;
+  word-break: break-word;
+}
+
+.task-row.done .task-text {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+/* ---------- кнопки «Завершить» и «Пропустить» — единый размер и форма ---------- */
+.task-complete-btn,
+.widget-skip-btn {
+  background: var(--success);
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+  height: 34px;
+  min-width: 90px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  box-shadow: 4px 4px 10px var(--shadow-dark), -4px -4px 10px var(--shadow-light);
+  transition: var(--transition);
+}
+
+.task-complete-btn:hover,
+.widget-skip-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+}
+
+.task-row.done .task-complete-btn {
+  background: rgba(0,0,0,0.1);
+  color: var(--text);
+  opacity: 0.5;
+  cursor: default;
+  box-shadow: none;
+}
+
+.widget-skip-btn {
+  background: var(--warning);
+}
+
+/* ---------- пустое состояние ---------- */
+.empty-state {
+  display: none;
+  text-align: center;
+  opacity: 0.55;
+  padding: 60px 20px;
+}
+
+.empty-state.show {
+  display: block;
+}
+
+.empty-state p {
+  margin: 4px 0;
+}
+
+.empty-state-sub {
+  font-size: 0.85rem;
+}
+
+/* ---------- оффлайн-индикатор ----------
+   Примечание: у браузерных PWA нет API для отрисовки собственного контента
+   непосредственно в системном «динамическом острове» iPhone — это закрытая
+   область iOS (ActivityKit), недоступная веб-странице. Ближайшее, что можно
+   сделать честно, — визуально похожая тёмная капсула у верхнего края экрана,
+   в той же зоне безопасной области (safe-area-inset-top), которая никогда не
+   перекрывает элементы интерфейса (см. #scrollable.offline-mode выше). */
+.offline-indicator {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -150%);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 90vw;
+  white-space: nowrap;
+  background: #1c1c1e;
+  color: #fff;
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 9px 18px;
+  padding-top: max(9px, env(safe-area-inset-top, 0px));
+  border-radius: 0 0 22px 22px;
+  transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+  z-index: 20000;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+}
+
+.offline-indicator.show {
+  transform: translate(-50%, 0);
+}
+
+.offline-indicator .offline-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--warning);
+  flex-shrink: 0;
+  animation: offlineDotPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes offlineDotPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+/* ---------- адаптив ---------- */
+@media (max-width: 600px) {
+  .task-widgets {
+    grid-template-columns: 1fr;
+  }
+  .task-widget.wide {
+    grid-column: span 1;
+  }
+  .neumorphic-btn.small {
+    padding: 9px 12px;
+    font-size: 0.8rem;
+    min-width: 76px;
+    height: 38px;
+  }
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
